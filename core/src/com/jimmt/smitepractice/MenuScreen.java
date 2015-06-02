@@ -27,7 +27,7 @@ public class MenuScreen implements Screen {
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
 		uiStage = new Stage(viewport);
 
-		background = new Image(Textures.getTex("baron.png"));
+		background = new Image(Textures.getTex("dragon.png"));
 		uiStage.addActor(background);
 		background.setSize(Constants.WIDTH, Constants.HEIGHT);
 		LabelStyle labelStyle = new LabelStyle();
