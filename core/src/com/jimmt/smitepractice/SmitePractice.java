@@ -6,6 +6,7 @@ public class SmitePractice extends Game {
 
 	@Override
 	public void create() {
+		UI.initialize();
 		setScreen(new MenuScreen(this));
 	}
 

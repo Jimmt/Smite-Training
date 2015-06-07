@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -19,48 +20,53 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 public class MenuScreen implements Screen {
 	Stage uiStage;
 	Label titleLabel;
-	TextButton playButton, optionsButton;
+	TextButton play1Button, play2Button, optionsButton;
 	StretchViewport viewport;
 	Image background;
+	Skin skin;
 
-	public MenuScreen(SmitePractice smiteGame) {
+	public MenuScreen(final SmitePractice smiteGame) {
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
 		uiStage = new Stage(viewport);
 
 		background = new Image(Textures.getTex("dragon.png"));
 		uiStage.addActor(background);
 		background.setSize(Constants.WIDTH, Constants.HEIGHT);
-		LabelStyle labelStyle = new LabelStyle();
-		BitmapFont rajdhaniLarge = new BitmapFont(Gdx.files.internal("fonts/rajdhani_large.fnt"));
-		labelStyle.font = rajdhaniLarge;
-		labelStyle.fontColor = Color.WHITE;
-		titleLabel = new Label("SMITE TRAINING", labelStyle);
-		uiStage.addActor(titleLabel);
-
-		TextButtonStyle buttonStyle = new TextButtonStyle();
-
-		Image buttonImage = new Image(Textures.getTex("button.png"));
-		buttonStyle.up = buttonImage.getDrawable();
-		buttonImage = new Image(Textures.getTex("button_clicked.png"));
-		buttonStyle.down = buttonImage.getDrawable();
-		BitmapFont rajdhani = new BitmapFont(Gdx.files.internal("fonts/rajdhani.fnt"));
-		buttonStyle.font = rajdhani;
-
-		playButton = new TextButton("PLAY", buttonStyle);
-		playButton.addListener(new ClickListener() {
+		titleLabel = new Label("SMITE TRAINING", UI.largeLabelStyle);
+		
+		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		
+		play1Button = new TextButton("1 PLAYER", UI.buttonStyle);
+		play1Button.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-
+				StartGameDialog dialog = new StartGameDialog(skin, smiteGame);
+				dialog.show(uiStage);
+				
 			}
 		});
-		optionsButton = new TextButton("OPTIONS", buttonStyle);
+		play2Button = new TextButton("2 PLAYERS", UI.buttonStyle);
+		play2Button.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				StartGameDialog dialog = new StartGameDialog(skin, smiteGame);
+				dialog.show(uiStage);
+				
+//				GameModeDialog dialog = new GameModeDialog(skin);
+//				dialog.show(uiStage);
+			}
+		});
+		optionsButton = new TextButton("OPTIONS", UI.buttonStyle);
 		optionsButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 
 			}
 		});
+		
+		
 		float margin = 20;
 		Table table = new Table();
-		table.add(playButton).padBottom(margin / 2).row();
+		table.add(titleLabel).padBottom(titleLabel.getHeight()).row();
+		table.add(play1Button).padBottom(margin / 2).row();
+		table.add(play2Button).padBottom(margin / 2).row();
 		table.add(optionsButton).padTop(margin / 2);
 		uiStage.addActor(table);
 		table.setFillParent(true);
@@ -83,8 +89,6 @@ public class MenuScreen implements Screen {
 		uiStage.act(delta);
 		uiStage.draw();
 
-		titleLabel.setPosition(Constants.WIDTH / 2 - titleLabel.getWidth() / 2, Constants.HEIGHT
-				- (Constants.HEIGHT - playButton.getY() + playButton.getHeight()) / 2 + titleLabel.getHeight() / 2);
 
 		viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
