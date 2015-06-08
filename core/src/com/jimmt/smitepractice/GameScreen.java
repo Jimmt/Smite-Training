@@ -23,8 +23,9 @@ public class GameScreen implements Screen {
 	String objective;
 	SmiteButton[] smiteButtons;
 	Image background;
-	int rounds;
+	int currentRound, rounds;
 	int players;
+	boolean alreadySmited, infinite;
 
 	public GameScreen(SmitePractice smiteGame, int players, String objective, int rounds) {
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
@@ -32,6 +33,7 @@ public class GameScreen implements Screen {
 
 		this.objective = objective;
 		this.rounds = rounds;
+		currentRound = 1;
 		this.players = players;
 
 		background = new Image(Textures.getTex(objective.toLowerCase() + ".png"));
@@ -54,7 +56,7 @@ public class GameScreen implements Screen {
 
 		smiteButtons = new SmiteButton[players];
 		setupUI();
-		
+
 	}
 
 	public void setupUI() {
@@ -69,7 +71,12 @@ public class GameScreen implements Screen {
 
 			button.addListener(new ClickListener() {
 				public void clicked(InputEvent event, float x, float y) {
-					smite();
+
+					if (!alreadySmited) {
+						System.out.println(smite());
+						alreadySmited = true;
+					}
+
 				}
 			});
 		}
@@ -106,15 +113,21 @@ public class GameScreen implements Screen {
 		monster.update(delta);
 		ai.update(delta);
 
-		if (Gdx.input.isKeyPressed(Keys.S)) {
-			System.out.println(smite());
-		}
+		if (monster.getHealth() <= 0) {
+			if (currentRound < rounds) {
+				currentRound++;
+				monster.reset();
 
-		if (monster.getHealth() < 0) {
-			healthBar.dead = true;
-		} else {
-			healthBar.health = monster.getHealth();
+				alreadySmited = false;
+				ai.alreadySmited = false;
+				ai.calculateSmiteHealth(monster);
+
+			} else {
+
+			}
+
 		}
+		healthBar.health = monster.getHealth();
 
 		uiStage.act(delta);
 		uiStage.draw();

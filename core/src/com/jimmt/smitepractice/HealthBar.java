@@ -13,7 +13,6 @@ public class HealthBar extends Actor {
 	Array<Image> dividers;
 	int health, startingHealth, healthMax;
 	float divWidth, barWidth;
-	boolean dead;
 
 	public HealthBar(int startingHealth, int maxHealth) {
 		this.startingHealth = startingHealth;
@@ -50,13 +49,10 @@ public class HealthBar extends Actor {
 		background.setPosition(getX(), getY());
 		bar.setPosition(getX() + 22f, getY() + 22f);
 
-		bar.setWidth(Math.max(health / ((float) startingHealth)  * barWidth, 0));
-		text.setPosition(getX() + 118 - text.getPrefWidth() / 2, getY() + 47 - text.getPrefHeight() / 2 + 1);
-		if (dead) {
-			text.setText("0");
-		} else {
-			text.setText(String.valueOf(health));
-		}
+		bar.setWidth(Math.max(health / ((float) startingHealth) * barWidth, 0));
+		text.setPosition(getX() + 118 - text.getPrefWidth() / 2, getY() + 47 - text.getPrefHeight()
+				/ 2 + 1);
+		text.setText(String.valueOf(health));
 
 		for (int i = 0; i < dividers.size; i++) {
 			dividers.get(i).setPosition(bar.getX() + i * divWidth, bar.getY());

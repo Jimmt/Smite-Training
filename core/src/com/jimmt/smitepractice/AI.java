@@ -9,8 +9,12 @@ public class AI {
 
 	public AI(Monster monster) {
 		this.monster = monster;
+		calculateSmiteHealth(monster);
+	}
+	
+	public void calculateSmiteHealth(Monster monster){
 		float ratio = (float) monster.getDamageRate() / 900;
-		smiteHealth = monster.getSmiteDamage() + ratio * MathUtils.random(-200, 200);
+		smiteHealth = monster.getSmiteDamage();
 	}
 
 	public void update(float delta) {

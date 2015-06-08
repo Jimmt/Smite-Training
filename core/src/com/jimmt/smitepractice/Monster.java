@@ -21,12 +21,24 @@ public abstract class Monster {
 		health = maxHealth / 3;
 	}
 	
+	public void reset(){
+		startTime = 20;
+		endTime = 50;
+		time = MathUtils.random(startTime, endTime);
+
+		calculateDamage();
+		calculateObjectiveHealth();
+		calculateSmiteDamage();
+		health = maxHealth / 3;
+	}
+	
 	public void doSmite(){
 		health -= smiteDamage;
 	}
 
 	public void update(float delta) {
 		health -= damageRate * delta;
+		health = Math.max(health, 0);
 	}
 
 	public int getHealth() {

@@ -30,8 +30,14 @@ public class StartGameDialog extends Dialog {
 		startButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 
-				smiteGame.setScreen(new GameScreen(smiteGame, 1, objectiveSelect.getSelectionName(),
-						Integer.valueOf(roundsSelect.getSelectionName())));
+				int rounds = 0;
+				if (roundsSelect.getSelectionName().equals("Infinite")) {
+					rounds = 999;
+				} else {
+					rounds = Integer.valueOf(roundsSelect.getSelectionName());
+				}
+				smiteGame.setScreen(new GameScreen(smiteGame, 1,
+						objectiveSelect.getSelectionName(), rounds));
 			}
 		});
 		TextButton backButton = new TextButton("Back", UI.startButtonStyle);
