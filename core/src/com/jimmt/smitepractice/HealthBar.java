@@ -30,7 +30,7 @@ public class HealthBar extends Actor {
 			Image divider = new Image(Textures.getTex("healthbar/divider.png"));
 			dividers.add(divider);
 		}
-		divWidth = bar.getWidth() / (maxHealth / 1000);
+		divWidth = (float) bar.getWidth() / (maxHealth / 1000);
 		barWidth = bar.getWidth() * startingHealth / maxHealth;
 	}
 
@@ -52,7 +52,7 @@ public class HealthBar extends Actor {
 		bar.setWidth(Math.max(health / ((float) startingHealth) * barWidth, 0));
 		text.setPosition(getX() + 118 - text.getPrefWidth() / 2, getY() + 47 - text.getPrefHeight()
 				/ 2 + 1);
-		text.setText(String.valueOf(health));
+		text.setText(String.valueOf(Math.max(health, 0)));
 
 		for (int i = 0; i < dividers.size; i++) {
 			dividers.get(i).setPosition(bar.getX() + i * divWidth, bar.getY());

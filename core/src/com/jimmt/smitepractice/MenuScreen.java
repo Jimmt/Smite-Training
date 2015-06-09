@@ -23,7 +23,6 @@ public class MenuScreen implements Screen {
 	TextButton play1Button, play2Button, optionsButton;
 	StretchViewport viewport;
 	Image background;
-	Skin skin;
 
 	public MenuScreen(final SmitePractice smiteGame) {
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
@@ -34,12 +33,10 @@ public class MenuScreen implements Screen {
 		background.setSize(Constants.WIDTH, Constants.HEIGHT);
 		titleLabel = new Label("SMITE TRAINING", UI.largeLabelStyle);
 		
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		
 		play1Button = new TextButton("1 PLAYER", UI.buttonStyle);
 		play1Button.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				StartGameDialog dialog = new StartGameDialog(skin, smiteGame);
+				StartGameDialog dialog = new StartGameDialog(smiteGame);
 				dialog.show(uiStage);
 				
 			}
@@ -47,7 +44,7 @@ public class MenuScreen implements Screen {
 		play2Button = new TextButton("2 PLAYERS", UI.buttonStyle);
 		play2Button.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				StartGameDialog dialog = new StartGameDialog(skin, smiteGame);
+				StartGameDialog dialog = new StartGameDialog(smiteGame);
 				dialog.show(uiStage);
 				
 //				GameModeDialog dialog = new GameModeDialog(skin);

@@ -14,7 +14,7 @@ public class AI {
 	
 	public void calculateSmiteHealth(Monster monster){
 		float ratio = (float) monster.getDamageRate() / 900;
-		smiteHealth = monster.getSmiteDamage();
+		smiteHealth = monster.getSmiteDamage() + ratio * MathUtils.random(-200, 200);
 	}
 
 	public void update(float delta) {

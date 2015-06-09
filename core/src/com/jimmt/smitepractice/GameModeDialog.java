@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class GameModeDialog extends Dialog {
 	
-	public GameModeDialog(Skin skin){
-		super("", skin);
+	public GameModeDialog(){
+		super("", UI.skin);
 		
 		Image background = new Image(Textures.getTex("dialogBackground.png"));
 		background(background.getDrawable());

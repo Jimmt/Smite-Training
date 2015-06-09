@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -16,6 +17,8 @@ public class UI {
 	public static LabelStyle largeLabelStyle, smallLabelStyle, smiteLabelStyle;
 
 	public static BitmapFont rajdhani_large, rajdhani, arial;
+	
+	public static Skin skin;
 
 	public static void initialize() {
 		rajdhani_large = new BitmapFont(Gdx.files.internal("fonts/rajdhani_large.fnt"));
@@ -60,6 +63,8 @@ public class UI {
 		blueSmiteStyle = new ImageButtonStyle();
 		blueSmiteStyle.up = new Image(Textures.getTex("bluesmite.png")).getDrawable();
 		blueSmiteStyle.down = new Image(Textures.getTex("bluesmite.png")).getDrawable();
+		
+		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
 	}
 

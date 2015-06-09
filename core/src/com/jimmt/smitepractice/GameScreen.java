@@ -15,34 +15,40 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class GameScreen implements Screen {
+	SmitePractice smiteGame;
 	Stage uiStage;
 	StretchViewport viewport;
+	Stats stats;
 	AI ai;
 	Monster monster;
+	GameConfiguration config;
+
 	HealthBar healthBar;
-	String objective;
 	SmiteButton[] smiteButtons;
 	Image background;
-	int currentRound, rounds;
-	int players;
-	boolean alreadySmited, infinite;
+	SmiteResult result;
 
-	public GameScreen(SmitePractice smiteGame, int players, String objective, int rounds) {
+	int currentRound = 1;
+	boolean alreadySmited, infinite, dialogShown;
+
+	public GameScreen(SmitePractice smiteGame, GameConfiguration config) {
+		this.smiteGame = smiteGame;
+		this.config = config;
+		stats = new Stats(config.rounds);
+
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
 		uiStage = new Stage(viewport);
 
-		this.objective = objective;
-		this.rounds = rounds;
-		currentRound = 1;
-		this.players = players;
-
-		background = new Image(Textures.getTex(objective.toLowerCase() + ".png"));
-
+		background = new Image(Textures.getTex(config.objective.toString() + ".png"));
+		result = new SmiteResult(config.objective);
 		uiStage.addActor(background);
+		uiStage.addActor(result);
+		result.setPosition(Constants.WIDTH - result.getWidth(), Constants.HEIGHT / 2 - result.getHeight() / 2);
+		result.hide();
 
-		if (objective.equals("Baron")) {
+		if (config.objective.equals("Baron")) {
 			monster = new Baron();
-		} else if (objective.equals("Dragon")) {
+		} else if (config.objective.equals("Dragon")) {
 			monster = new Dragon();
 		}
 		ai = new AI(monster);
@@ -54,7 +60,7 @@ public class GameScreen implements Screen {
 		background.addAction(Actions.sizeTo(Constants.WIDTH, Constants.HEIGHT));
 		uiStage.addActor(healthBar);
 
-		smiteButtons = new SmiteButton[players];
+		smiteButtons = new SmiteButton[1];
 		setupUI();
 
 	}
@@ -62,27 +68,32 @@ public class GameScreen implements Screen {
 	public void setupUI() {
 		Gdx.input.setInputProcessor(uiStage);
 
-		if (players == 1) {
-			SmiteButton button = new SmiteButton();
-			uiStage.addActor(button);
-			button.setPosition(Constants.WIDTH / 2 - button.getWidth() / 2,
-					monster.getCenterY(background.getHeight()) / 3 - button.getHeight() / 2);
-			button.setDamage(monster.getSmiteDamage());
+		SmiteButton button = new SmiteButton();
+		uiStage.addActor(button);
+		button.setPosition(Constants.WIDTH / 2 - button.getWidth() / 2,
+				monster.getCenterY(background.getHeight()) / 3 - button.getHeight() / 2);
+		button.setDamage(monster.getSmiteDamage());
 
-			button.addListener(new ClickListener() {
-				public void clicked(InputEvent event, float x, float y) {
+		button.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
 
-					if (!alreadySmited) {
-						System.out.println(smite());
-						alreadySmited = true;
+				if (!alreadySmited) {
+					boolean smiteHit = smite();
+
+					result.update(smiteHit);
+					
+					if (smiteHit) {
+						stats.logSmiteHit();
+						
 					}
+					result.display(); //testing
+					result.addAction(Actions.fadeIn(0.5f));
 
+					alreadySmited = true;
 				}
-			});
-		}
-		if (players == 2) {
 
-		}
+			}
+		});
 
 	}
 
@@ -114,7 +125,7 @@ public class GameScreen implements Screen {
 		ai.update(delta);
 
 		if (monster.getHealth() <= 0) {
-			if (currentRound < rounds) {
+			if (currentRound < config.rounds || config.rounds == -1) {
 				currentRound++;
 				monster.reset();
 
@@ -123,7 +134,13 @@ public class GameScreen implements Screen {
 				ai.calculateSmiteHealth(monster);
 
 			} else {
-
+				if (!dialogShown) {
+					result.hide();
+					
+					GameFinishedDialog dialog = new GameFinishedDialog(smiteGame, config, stats);
+					dialog.show(uiStage);
+					dialogShown = true;
+				}
 			}
 
 		}

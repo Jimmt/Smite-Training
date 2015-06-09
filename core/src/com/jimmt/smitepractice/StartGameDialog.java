@@ -14,14 +14,14 @@ public class StartGameDialog extends Dialog {
 	SelectButton objectiveSelect, roundsSelect;
 	Label objective, rounds;
 
-	public StartGameDialog(Skin skin, final SmitePractice smiteGame) {
-		super("", skin);
+	public StartGameDialog(final SmitePractice smiteGame) {
+		super("", UI.skin);
 
 		Image background = new Image(Textures.getTex("dialogBackground.png"));
 		background(background.getDrawable());
 
 		objectiveSelect = new SelectButton("Dragon", "Baron");
-		roundsSelect = new SelectButton("1", "5", "Infinite");
+		roundsSelect = new SelectButton("1", "5", "10", "Infinite");
 
 		objective = new Label("Objective", UI.smallLabelStyle);
 		rounds = new Label("Rounds", UI.smallLabelStyle);
@@ -30,14 +30,8 @@ public class StartGameDialog extends Dialog {
 		startButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 
-				int rounds = 0;
-				if (roundsSelect.getSelectionName().equals("Infinite")) {
-					rounds = 999;
-				} else {
-					rounds = Integer.valueOf(roundsSelect.getSelectionName());
-				}
-				smiteGame.setScreen(new GameScreen(smiteGame, 1,
-						objectiveSelect.getSelectionName(), rounds));
+				GameConfiguration config = new GameConfiguration(objectiveSelect.getSelectionName(), roundsSelect.getSelectionName());
+				smiteGame.setScreen(new GameScreen(smiteGame, config));
 			}
 		});
 		TextButton backButton = new TextButton("Back", UI.startButtonStyle);
