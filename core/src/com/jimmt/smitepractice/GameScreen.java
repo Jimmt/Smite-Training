@@ -19,7 +19,6 @@ public class GameScreen implements Screen {
 	Stage uiStage;
 	StretchViewport viewport;
 	Stats stats;
-	AI ai;
 	Monster monster;
 	GameConfiguration config;
 
@@ -39,19 +38,19 @@ public class GameScreen implements Screen {
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
 		uiStage = new Stage(viewport);
 
-		background = new Image(Textures.getTex(config.objective.toString() + ".png"));
+		background = new Image(
+				Textures.getTex("background/" + config.objective.toString() + ".png"));
 		result = new SmiteResult(config.objective);
 		uiStage.addActor(background);
 		uiStage.addActor(result);
-		result.setPosition(Constants.WIDTH - result.getWidth(), Constants.HEIGHT / 2 - result.getHeight() / 2);
-		result.hide();
+		result.setPosition(Constants.WIDTH - result.getWidth(),
+				Constants.HEIGHT / 2 - result.getHeight() / 2);
 
 		if (config.objective.equals("Baron")) {
 			monster = new Baron();
 		} else if (config.objective.equals("Dragon")) {
 			monster = new Dragon();
 		}
-		ai = new AI(monster);
 
 		healthBar = new HealthBar(monster.getMaxHealth() / 3, monster.getMaxHealth());
 		healthBar.centerPosition(monster.getCenterX(background.getWidth()),
@@ -69,6 +68,7 @@ public class GameScreen implements Screen {
 		Gdx.input.setInputProcessor(uiStage);
 
 		SmiteButton button = new SmiteButton();
+		smiteButtons[0] = button;
 		uiStage.addActor(button);
 		button.setPosition(Constants.WIDTH / 2 - button.getWidth() / 2,
 				monster.getCenterY(background.getHeight()) / 3 - button.getHeight() / 2);
@@ -78,15 +78,15 @@ public class GameScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 
 				if (!alreadySmited) {
+					int health = monster.getHealth();
 					boolean smiteHit = smite();
+					result.update(smiteHit, monster, health);
 
-					result.update(smiteHit);
-					
 					if (smiteHit) {
 						stats.logSmiteHit();
-						
+
 					}
-					result.display(); //testing
+					result.display(); // testing
 					result.addAction(Actions.fadeIn(0.5f));
 
 					alreadySmited = true;
@@ -122,21 +122,24 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		monster.update(delta);
-		ai.update(delta);
-
+// ai.update(delta);
 		if (monster.getHealth() <= 0) {
 			if (currentRound < config.rounds || config.rounds == -1) {
 				currentRound++;
 				monster.reset();
-
+				result.hide();
 				alreadySmited = false;
-				ai.alreadySmited = false;
-				ai.calculateSmiteHealth(monster);
+
+				for (SmiteButton sb : smiteButtons) {
+					sb.damageText.setText(String.valueOf(monster.getDamageRate()));
+				}
+// ai.alreadySmited = false;
+// ai.calculateSmiteHealth(monster);
 
 			} else {
 				if (!dialogShown) {
 					result.hide();
-					
+
 					GameFinishedDialog dialog = new GameFinishedDialog(smiteGame, config, stats);
 					dialog.show(uiStage);
 					dialogShown = true;

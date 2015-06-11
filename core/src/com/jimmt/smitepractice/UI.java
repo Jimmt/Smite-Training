@@ -14,9 +14,9 @@ public class UI {
 	public static TextButtonStyle startButtonStyle;
 	public static TextButtonStyle selectButtonStyle;
 	public static ImageButtonStyle smiteStyle, redSmiteStyle, blueSmiteStyle;
-	public static LabelStyle largeLabelStyle, smallLabelStyle, smiteLabelStyle;
+	public static LabelStyle largeLabelStyle, smallLabelStyle, smiteLabelStyle, rankLabelStyle;
 
-	public static BitmapFont rajdhani_large, rajdhani, arial;
+	public static BitmapFont rajdhani_large, rajdhani, arial, hemihead;
 	
 	public static Skin skin;
 
@@ -24,10 +24,15 @@ public class UI {
 		rajdhani_large = new BitmapFont(Gdx.files.internal("fonts/rajdhani_large.fnt"));
 		rajdhani = new BitmapFont(Gdx.files.internal("fonts/rajdhani.fnt"));
 		arial = new BitmapFont(Gdx.files.internal("fonts/arial.fnt"));
+		hemihead = new BitmapFont(Gdx.files.internal("fonts/hemihead.fnt"));
 
 		largeLabelStyle = new LabelStyle();
 		largeLabelStyle.font = rajdhani_large;
 		largeLabelStyle.fontColor = Color.WHITE;
+		
+		rankLabelStyle = new LabelStyle();
+		rankLabelStyle.font = hemihead;
+		rankLabelStyle.fontColor = Color.WHITE;
 
 		smallLabelStyle = new LabelStyle();
 		smallLabelStyle.font = rajdhani;
@@ -54,15 +59,14 @@ public class UI {
 		selectButtonStyle.font = rajdhani;
 
 		smiteStyle = new ImageButtonStyle();
-		Image smite = new Image(Textures.getTex("smite.png"));
-		smiteStyle.up = smite.getDrawable();
-		smiteStyle.down = new Image(Textures.getTex("smite.png")).getDrawable();
+		smiteStyle.up = new Image(Textures.getTex("smite/smite.png")).getDrawable();
+		smiteStyle.down = new Image(Textures.getTex("smite/smite_clicked.png")).getDrawable();
 		redSmiteStyle = new ImageButtonStyle();
-		redSmiteStyle.up = new Image(Textures.getTex("redsmite.png")).getDrawable();
-		redSmiteStyle.down = new Image(Textures.getTex("redsmite.png")).getDrawable();
+		redSmiteStyle.up = new Image(Textures.getTex("smite/redsmite.png")).getDrawable();
+		redSmiteStyle.down = new Image(Textures.getTex("smite/redsmite_clicked.png")).getDrawable();
 		blueSmiteStyle = new ImageButtonStyle();
-		blueSmiteStyle.up = new Image(Textures.getTex("bluesmite.png")).getDrawable();
-		blueSmiteStyle.down = new Image(Textures.getTex("bluesmite.png")).getDrawable();
+		blueSmiteStyle.up = new Image(Textures.getTex("smite/bluesmite.png")).getDrawable();
+		blueSmiteStyle.down = new Image(Textures.getTex("smite/bluesmite_clicked.png")).getDrawable();
 		
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 

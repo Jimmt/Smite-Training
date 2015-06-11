@@ -37,7 +37,8 @@ public abstract class Monster {
 	}
 
 	public void update(float delta) {
-		health -= damageRate * delta;
+		float damage = damageRate * MathUtils.random(0.5f, 1.5f);
+		health -= damage * delta;
 		health = Math.max(health, 0);
 	}
 

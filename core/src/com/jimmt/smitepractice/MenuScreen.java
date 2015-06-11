@@ -28,7 +28,7 @@ public class MenuScreen implements Screen {
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
 		uiStage = new Stage(viewport);
 
-		background = new Image(Textures.getTex("dragon.png"));
+		background = new Image(Textures.getTex("background/dragon.png"));
 		uiStage.addActor(background);
 		background.setSize(Constants.WIDTH, Constants.HEIGHT);
 		titleLabel = new Label("SMITE TRAINING", UI.largeLabelStyle);
