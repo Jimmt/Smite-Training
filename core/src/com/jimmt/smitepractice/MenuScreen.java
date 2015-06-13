@@ -54,7 +54,8 @@ public class MenuScreen implements Screen {
 		optionsButton = new TextButton("OPTIONS", UI.buttonStyle);
 		optionsButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-
+				OptionsDialog dialog = new OptionsDialog();
+				dialog.show(uiStage);
 			}
 		});
 		

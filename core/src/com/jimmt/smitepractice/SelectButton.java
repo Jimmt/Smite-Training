@@ -12,7 +12,7 @@ public class SelectButton extends Table {
 	String[] names;
 	ButtonGroup<TextButton> group;
 
-	public SelectButton(String... names) {
+	public SelectButton(int initialSelection, String... names) {
 		buttons = new Array<TextButton>();
 		this.names = names;
 		group = new ButtonGroup<TextButton>();
@@ -30,9 +30,12 @@ public class SelectButton extends Table {
 				}
 			});
 		}
+		
+		group.getButtons().get(initialSelection).setChecked(true);
 
 
 	}
+	
 
 	public TextButton getButton(String name) {
 		for (int i = 0; i < names.length; i++) {

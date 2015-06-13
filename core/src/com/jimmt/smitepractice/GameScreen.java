@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -22,9 +23,11 @@ public class GameScreen implements Screen {
 	Monster monster;
 	GameConfiguration config;
 
+	Image beam = new Image(Textures.getTex("smite/smiteBeam.png"));
 	HealthBar healthBar;
 	SmiteButton[] smiteButtons;
 	Image background;
+	ImageButton homeButton;
 	SmiteResult result;
 
 	int currentRound = 1;
@@ -38,9 +41,9 @@ public class GameScreen implements Screen {
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
 		uiStage = new Stage(viewport);
 
-		background = new Image(
-				Textures.getTex("background/" + config.objective.toString() + ".png"));
-		result = new SmiteResult(config.objective);
+		background = new Image(Textures.getTex("background/"
+				+ config.objective.toString().toLowerCase() + ".png"));
+		result = new SmiteResult(config.objective.toLowerCase());
 		uiStage.addActor(background);
 		uiStage.addActor(result);
 		result.setPosition(Constants.WIDTH - result.getWidth(),
@@ -58,6 +61,10 @@ public class GameScreen implements Screen {
 
 		background.addAction(Actions.sizeTo(Constants.WIDTH, Constants.HEIGHT));
 		uiStage.addActor(healthBar);
+		uiStage.addActor(beam);
+		beam.setPosition(monster.getSmiteX(background.getWidth()) - beam.getWidth() / 2,
+				monster.getSmiteY(background.getHeight()));
+		beam.setColor(1, 1, 1, 0f);
 
 		smiteButtons = new SmiteButton[1];
 		setupUI();
@@ -95,6 +102,15 @@ public class GameScreen implements Screen {
 			}
 		});
 
+		homeButton = new ImageButton(UI.homeStyle);
+		homeButton.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				smiteGame.setScreen(new MenuScreen(smiteGame));
+			}
+		});
+		uiStage.addActor(homeButton);
+		homeButton.setPosition(20, Constants.HEIGHT - homeButton.getHeight() - 20);
+
 	}
 
 	public boolean smite() {
@@ -103,10 +119,10 @@ public class GameScreen implements Screen {
 			if (monster.getHealth() == 0) {
 				return false;
 			}
-			monster.doSmite();
+			monster.doSmite(beam);
 			return true;
 		}
-		monster.doSmite();
+		monster.doSmite(beam);
 		return false;
 	}
 

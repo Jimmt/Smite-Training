@@ -17,4 +17,14 @@ public class Baron extends Monster {
 	public float getCenterY(float bgHeight) {
 		return 988 / bgHeight * Constants.HEIGHT;
 	}
+	
+	@Override
+	public float getSmiteX(float bgWidth) {
+		return 839 / bgWidth * Constants.WIDTH;
+	}
+
+	@Override
+	public float getSmiteY(float bgHeight) {
+		return 545 / bgHeight * Constants.HEIGHT;
+	}
 }

@@ -16,5 +16,15 @@ public class Dragon extends Monster {
 	public float getCenterY(float bgHeight) {
 		return 610 / bgHeight * Constants.HEIGHT;
 	}
+	
+	@Override
+	public float getSmiteX(float bgWidth) {
+		return 810 / bgWidth * Constants.WIDTH;
+	}
+
+	@Override
+	public float getSmiteY(float bgHeight) {
+		return 461 / bgHeight * Constants.HEIGHT;
+	}
 
 }

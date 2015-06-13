@@ -1,6 +1,9 @@
 package com.jimmt.smitepractice;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public abstract class Monster {
 	int health, maxHealth, damageRate;
@@ -20,8 +23,8 @@ public abstract class Monster {
 		calculateSmiteDamage();
 		health = maxHealth / 3;
 	}
-	
-	public void reset(){
+
+	public void reset() {
 		startTime = 20;
 		endTime = 50;
 		time = MathUtils.random(startTime, endTime);
@@ -31,9 +34,12 @@ public abstract class Monster {
 		calculateSmiteDamage();
 		health = maxHealth / 3;
 	}
-	
-	public void doSmite(){
+
+	public void doSmite(Image beam) {
 		health -= smiteDamage;
+		beam.addAction(Actions.sequence(Actions.alpha(1f),
+				Actions.moveBy(0, -Constants.HEIGHT / 4, 0.04f, Interpolation.exp10In), Actions.alpha(0f, 0.11f))); // 0.230
+		SmitePractice.soundManager.play("smite");
 	}
 
 	public void update(float delta) {
@@ -72,4 +78,8 @@ public abstract class Monster {
 	public abstract float getCenterX(float bgWidth);
 
 	public abstract float getCenterY(float bgHeight);
+
+	public abstract float getSmiteX(float bgWidth);
+
+	public abstract float getSmiteY(float bgHeight);
 }

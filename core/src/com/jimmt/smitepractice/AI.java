@@ -31,7 +31,7 @@ public class AI {
 
 		if (monster.getHealth() > 0) {
 			
-			monster.doSmite();
+//			monster.doSmite();
 		}
 	}
 }

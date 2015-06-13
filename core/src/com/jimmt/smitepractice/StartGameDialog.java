@@ -20,8 +20,8 @@ public class StartGameDialog extends Dialog {
 		Image background = new Image(Textures.getTex("dialogBackground.png"));
 		background(background.getDrawable());
 
-		objectiveSelect = new SelectButton("Dragon", "Baron");
-		roundsSelect = new SelectButton("1", "5", "10", "Infinite");
+		objectiveSelect = new SelectButton(0, "Dragon", "Baron");
+		roundsSelect = new SelectButton(0, "1", "5", "10", "Infinite");
 
 		objective = new Label("Objective", UI.smallLabelStyle);
 		rounds = new Label("Rounds", UI.smallLabelStyle);

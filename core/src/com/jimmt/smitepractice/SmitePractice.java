@@ -1,12 +1,21 @@
 package com.jimmt.smitepractice;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 
 public class SmitePractice extends Game {
+	public static SoundManager soundManager;
 
 	@Override
 	public void create() {
+		soundManager = new SoundManager();
+		soundManager.loadSound("smite", Gdx.files.internal("sfx/smite.wav"));
 		UI.initialize();
+		Prefs.initialize();
+		
+		boolean enableSound = Prefs.prefs.getBoolean("sound");
+		SmitePractice.soundManager.playSound = enableSound;
+		
 		setScreen(new MenuScreen(this));
 	}
 
