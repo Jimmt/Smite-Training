@@ -38,12 +38,13 @@ public abstract class Monster {
 	public void doSmite(Image beam) {
 		health -= smiteDamage;
 		beam.addAction(Actions.sequence(Actions.alpha(1f),
-				Actions.moveBy(0, -Constants.HEIGHT / 4, 0.04f, Interpolation.exp10In), Actions.alpha(0f, 0.11f))); // 0.230
+				Actions.moveBy(0, -Constants.HEIGHT / 4, 0.04f, Interpolation.exp10In),
+				Actions.alpha(0f, 0.11f))); // 0.230
 		SmitePractice.soundManager.play("smite");
 	}
 
 	public void update(float delta) {
-		float damage = damageRate * MathUtils.random(0.5f, 1.5f);
+		float damage = damageRate * MathUtils.random(0.25f, 1f);
 		health -= damage * delta;
 		health = Math.max(health, 0);
 	}

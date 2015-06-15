@@ -2,17 +2,15 @@ package com.jimmt.smitepractice;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class GameScreen implements Screen {
@@ -24,6 +22,7 @@ public class GameScreen implements Screen {
 	GameConfiguration config;
 
 	Image beam = new Image(Textures.getTex("smite/smiteBeam.png"));
+	Image black = new Image(Textures.getTex("black.png"));
 	HealthBar healthBar;
 	SmiteButton[] smiteButtons;
 	Image background;
@@ -32,6 +31,7 @@ public class GameScreen implements Screen {
 
 	int currentRound = 1;
 	boolean alreadySmited, infinite, dialogShown;
+	float delayTimer;
 
 	public GameScreen(SmitePractice smiteGame, GameConfiguration config) {
 		this.smiteGame = smiteGame;
@@ -65,6 +65,9 @@ public class GameScreen implements Screen {
 		beam.setPosition(monster.getSmiteX(background.getWidth()) - beam.getWidth() / 2,
 				monster.getSmiteY(background.getHeight()));
 		beam.setColor(1, 1, 1, 0f);
+		black.setSize(Constants.WIDTH, Constants.HEIGHT);
+		black.setColor(1, 1, 1, 0f);
+		uiStage.addActor(black);
 
 		smiteButtons = new SmiteButton[1];
 		setupUI();
@@ -93,7 +96,7 @@ public class GameScreen implements Screen {
 						stats.logSmiteHit();
 
 					}
-					result.display(); // testing
+					result.display();
 					result.addAction(Actions.fadeIn(0.5f));
 
 					alreadySmited = true;
@@ -131,6 +134,26 @@ public class GameScreen implements Screen {
 
 	}
 
+	class NewRoundAction extends Action {
+		boolean done;
+
+		public boolean act(float delta) {
+			if (!done) {
+				done = true;
+				currentRound++;
+				monster.reset();
+				result.hide();
+				alreadySmited = false;
+
+				for (SmiteButton sb : smiteButtons) {
+					sb.damageText.setText(String.valueOf(monster.getDamageRate()));
+				}
+			}
+			return true;
+		}
+
+	}
+
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -141,24 +164,27 @@ public class GameScreen implements Screen {
 // ai.update(delta);
 		if (monster.getHealth() <= 0) {
 			if (currentRound < config.rounds || config.rounds == -1) {
-				currentRound++;
-				monster.reset();
-				result.hide();
-				alreadySmited = false;
 
-				for (SmiteButton sb : smiteButtons) {
-					sb.damageText.setText(String.valueOf(monster.getDamageRate()));
+				if (black.getActions().size == 0) {
+					black.toFront();
+					black.setTouchable(Touchable.disabled);
+					black.addAction(Actions.sequence(Actions.delay(1.4f), Actions.alpha(1, 0.2f),
+							Actions.delay(0.1f), Actions.alpha(0, 0.2f), new NewRoundAction()));
 				}
 // ai.alreadySmited = false;
 // ai.calculateSmiteHealth(monster);
 
 			} else {
 				if (!dialogShown) {
-					result.hide();
+					if (delayTimer >= 1) {
+						result.hide();
 
-					GameFinishedDialog dialog = new GameFinishedDialog(smiteGame, config, stats);
-					dialog.show(uiStage);
-					dialogShown = true;
+						GameFinishedDialog dialog = new GameFinishedDialog(smiteGame, config, stats);
+						dialog.show(uiStage);
+						dialogShown = true;
+					} else {
+						delayTimer += delta;
+					}
 				}
 			}
 
