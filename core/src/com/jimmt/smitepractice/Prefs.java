@@ -12,6 +12,10 @@ public class Prefs {
 		if (!prefs.contains("sound")) {
 			prefs.putBoolean("sound", true);
 		}
+		if(!prefs.contains("objective")){
+			prefs.putInteger("objective", 0);
+			prefs.putInteger("rounds", 0);
+		}
 
 		prefs.flush();
 	}

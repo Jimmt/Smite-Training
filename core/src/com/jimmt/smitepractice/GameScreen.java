@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
 
 	int currentRound = 1;
 	boolean alreadySmited, infinite, dialogShown;
-	float delayTimer;
+	float delayTimer, totalPercent;
 
 	public GameScreen(SmitePractice smiteGame, GameConfiguration config) {
 		this.smiteGame = smiteGame;
@@ -90,14 +90,12 @@ public class GameScreen implements Screen {
 				if (!alreadySmited) {
 					int health = monster.getHealth();
 					boolean smiteHit = smite();
-					result.update(smiteHit, monster, health);
+					result.update(monster, health);
 
-					if (smiteHit) {
-						stats.logSmiteHit();
+					stats.logSmite(smiteHit, health / (float) monster.getSmiteDamage() * 100f, monster.getSmiteDamage() - health);
 
-					}
 					result.display();
-					result.addAction(Actions.fadeIn(0.5f));
+					result.addAction(Actions.fadeIn(0.25f));
 
 					alreadySmited = true;
 				}

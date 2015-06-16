@@ -14,7 +14,7 @@ public class UI {
 	public static TextButtonStyle startButtonStyle;
 	public static TextButtonStyle selectButtonStyle;
 	public static ImageButtonStyle smiteStyle, redSmiteStyle, blueSmiteStyle, homeStyle;
-	public static LabelStyle largeLabelStyle, smallLabelStyle, smiteLabelStyle, rankLabelStyle;
+	public static LabelStyle largeLabelStyle, smallLabelStyle, smiteLabelStyle, rankLabelStyle, rankLabelStyle_black;
 
 	public static BitmapFont rajdhani_large, rajdhani, arial, hemihead;
 	
@@ -33,14 +33,20 @@ public class UI {
 		rankLabelStyle = new LabelStyle();
 		rankLabelStyle.font = hemihead;
 		rankLabelStyle.fontColor = Color.WHITE;
+		
+		rankLabelStyle_black = new LabelStyle();
+		rankLabelStyle_black.font = hemihead;
+		rankLabelStyle_black.fontColor = Color.BLACK;
 
 		smallLabelStyle = new LabelStyle();
 		smallLabelStyle.font = rajdhani;
 		smallLabelStyle.fontColor = Color.BLACK;
 		
+		
 		smiteLabelStyle = new LabelStyle();
 		smiteLabelStyle.font = rajdhani;
 		smiteLabelStyle.fontColor = Color.WHITE;
+		
 
 		buttonStyle = new TextButtonStyle();
 		buttonStyle.up = new Image(Textures.getTex("button.png")).getDrawable();

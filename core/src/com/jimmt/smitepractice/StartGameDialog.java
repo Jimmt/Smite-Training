@@ -20,8 +20,21 @@ public class StartGameDialog extends Dialog {
 		Image background = new Image(Textures.getTex("dialogBackground.png"));
 		background(background.getDrawable());
 
-		objectiveSelect = new SelectButton(0, "Dragon", "Baron");
-		roundsSelect = new SelectButton(0, "1", "5", "10", "Infinite");
+		objectiveSelect = new SelectButton(Prefs.prefs.getInteger("objective"), "Dragon", "Baron");
+		roundsSelect = new SelectButton(Prefs.prefs.getInteger("rounds"), "1", "5", "10", "Infinite");
+		
+		objectiveSelect.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				Prefs.prefs.putInteger("objective", objectiveSelect.getSelectionIndex());
+				Prefs.prefs.flush();
+			}
+		});
+		roundsSelect.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				Prefs.prefs.putInteger("rounds", roundsSelect.getSelectionIndex());
+				Prefs.prefs.flush();
+			}
+		});
 
 		objective = new Label("Objective", UI.smallLabelStyle);
 		rounds = new Label("Rounds", UI.smallLabelStyle);
@@ -29,7 +42,6 @@ public class StartGameDialog extends Dialog {
 		TextButton startButton = new TextButton("Start", UI.startButtonStyle);
 		startButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-
 				GameConfiguration config = new GameConfiguration(objectiveSelect.getSelectionName(), roundsSelect.getSelectionName());
 				smiteGame.setScreen(new GameScreen(smiteGame, config));
 			}

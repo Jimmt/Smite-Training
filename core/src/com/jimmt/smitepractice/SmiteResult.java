@@ -50,13 +50,20 @@ public class SmiteResult extends Image {
 				getY() - popup.getPrefHeight());
 	}
 
-	public void update(boolean successful, Monster monster, int smiteHealth) {
+	public void update(Monster monster, int smiteHealth) {
 		int maxDifference = monster.getSmiteDamage();
 
 		float ratio = smiteHealth / (float) maxDifference * 100f;
 		String formatted = String.format("%.3g", ratio) + "%";
 		text.setText(formatted);
 
+		setColors(ratio);
+
+		displayPopup();
+
+	}
+
+	public void setColors(float ratio) {
 		if (ratio > 100) {
 			setColor(1, 0, 0, 1f);
 			popup.setText("Too early");
@@ -73,9 +80,6 @@ public class SmiteResult extends Image {
 			setColor(1, 0, 0, 1f);
 			popup.setText("Cardboard");
 		}
-
-		displayPopup();
-
 	}
 
 	public void displayPopup() {

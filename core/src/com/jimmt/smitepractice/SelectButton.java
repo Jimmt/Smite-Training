@@ -45,6 +45,10 @@ public class SelectButton extends Table {
 		}
 		return null;
 	}
+	
+	public int getSelectionIndex(){
+		return group.getCheckedIndex();
+	}
 
 	public String getSelectionName() {
 		return names[group.getCheckedIndex()];
