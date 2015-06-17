@@ -14,8 +14,8 @@ public class StartGameDialog extends Dialog {
 	SelectButton objectiveSelect, roundsSelect;
 	Label objective, rounds;
 
-	public StartGameDialog(final SmitePractice smiteGame) {
-		super("", UI.skin);
+	public StartGameDialog(final SmitePractice smiteGame, final int players) {
+		super("", UI.skin);     
 
 		Image background = new Image(Textures.getTex("dialogBackground.png"));
 		background(background.getDrawable());
@@ -42,7 +42,7 @@ public class StartGameDialog extends Dialog {
 		TextButton startButton = new TextButton("Start", UI.startButtonStyle);
 		startButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				GameConfiguration config = new GameConfiguration(objectiveSelect.getSelectionName(), roundsSelect.getSelectionName());
+				GameConfiguration config = new GameConfiguration(objectiveSelect.getSelectionName(), roundsSelect.getSelectionName(), players);
 				smiteGame.setScreen(new GameScreen(smiteGame, config));
 			}
 		});

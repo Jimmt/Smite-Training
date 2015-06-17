@@ -36,7 +36,7 @@ public class MenuScreen implements Screen {
 		play1Button = new TextButton("1 PLAYER", UI.buttonStyle);
 		play1Button.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				StartGameDialog dialog = new StartGameDialog(smiteGame);
+				StartGameDialog dialog = new StartGameDialog(smiteGame, 1);
 				dialog.show(uiStage);
 				
 			}
@@ -44,11 +44,8 @@ public class MenuScreen implements Screen {
 		play2Button = new TextButton("2 PLAYERS", UI.buttonStyle);
 		play2Button.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				StartGameDialog dialog = new StartGameDialog(smiteGame);
+				StartGameDialog dialog = new StartGameDialog(smiteGame, 2);
 				dialog.show(uiStage);
-				
-//				GameModeDialog dialog = new GameModeDialog(skin);
-//				dialog.show(uiStage);
 			}
 		});
 		optionsButton = new TextButton("OPTIONS", UI.buttonStyle);

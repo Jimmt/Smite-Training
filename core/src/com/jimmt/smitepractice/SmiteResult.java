@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 public class SmiteResult extends Image {
 	Image icon;
 	Label text, popup;
+	Container wrapper, popupWrapper;
 	boolean successful;
 	int border = 20;
 
@@ -27,19 +29,45 @@ public class SmiteResult extends Image {
 		this.setColor(1, 1, 1, 0);
 		icon.setColor(1, 1, 1, 0);
 		text.setColor(1, 1, 1, 0);
+
+		setOrigin(getWidth() / 2, getHeight() / 2);
+		icon.setOrigin(getWidth() / 2 - border, icon.getHeight() / 2);
+
+		wrapper = new Container(text);
+		wrapper.setTransform(true);
+		popupWrapper = new Container(popup);
+		popupWrapper.setTransform(true);
+		popup.setOrigin(0, 0);
+	}
+
+	public void setRotation(float angle) {
+		super.setRotation(angle);
+		wrapper.setRotation(angle);
+		icon.setRotation(angle);
+		popupWrapper.setRotation(angle);
+	}
+
+	public void rotateBy(float angle) {
+		super.rotateBy(angle);
+		wrapper.rotateBy(angle);
+		icon.rotateBy(angle);
+		popupWrapper.rotateBy(angle);
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 		icon.draw(batch, parentAlpha);
-		text.draw(batch, parentAlpha);
-		popup.draw(batch, parentAlpha);
+		wrapper.draw(batch, parentAlpha);
+		popupWrapper.draw(batch, parentAlpha);
 	}
 
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+
+		wrapper.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
+		popupWrapper.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
 		icon.act(delta);
 		icon.setPosition(getX() + border, getY() + getHeight() / 2 - icon.getHeight() / 2);
 		text.act(delta);
@@ -99,6 +127,12 @@ public class SmiteResult extends Image {
 		addAction(Actions.sequence(Actions.delay(1.0f), Actions.alpha(0, 0.5f)));
 		icon.addAction(Actions.sequence(Actions.delay(1.0f), Actions.alpha(0, 0.5f)));
 		text.addAction(Actions.sequence(Actions.delay(1.0f), Actions.alpha(0, 0.5f)));
+	}
+
+	public void hideImmediate() {
+		addAction(Actions.alpha(0));
+		icon.addAction(Actions.alpha(0));
+		text.addAction(Actions.alpha(0));
 	}
 
 }

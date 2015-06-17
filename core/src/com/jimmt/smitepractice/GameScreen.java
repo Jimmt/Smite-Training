@@ -17,7 +17,8 @@ public class GameScreen implements Screen {
 	SmitePractice smiteGame;
 	Stage uiStage;
 	StretchViewport viewport;
-	Stats stats;
+	Stats stats1;
+	Stats stats2;
 	Monster monster;
 	GameConfiguration config;
 
@@ -27,27 +28,32 @@ public class GameScreen implements Screen {
 	SmiteButton[] smiteButtons;
 	Image background;
 	ImageButton homeButton;
-	SmiteResult result;
+	SmiteResult result1;
+	SmiteResult result2;
 
 	int currentRound = 1;
-	boolean alreadySmited, infinite, dialogShown;
+	boolean infinite, dialogShown;
 	float delayTimer, totalPercent;
 
 	public GameScreen(SmitePractice smiteGame, GameConfiguration config) {
 		this.smiteGame = smiteGame;
 		this.config = config;
-		stats = new Stats(config.rounds);
+		stats1 = new Stats(config.rounds);
+		stats2 = new Stats(config.rounds);
 
 		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
 		uiStage = new Stage(viewport);
 
 		background = new Image(Textures.getTex("background/"
 				+ config.objective.toString().toLowerCase() + ".png"));
-		result = new SmiteResult(config.objective.toLowerCase());
 		uiStage.addActor(background);
-		uiStage.addActor(result);
-		result.setPosition(Constants.WIDTH - result.getWidth(),
-				Constants.HEIGHT / 2 - result.getHeight() / 2);
+
+		result1 = new SmiteResult(config.objective.toLowerCase());
+		uiStage.addActor(result1);
+		result2 = new SmiteResult(config.objective.toLowerCase());
+		if (config.players == 2) {
+			uiStage.addActor(result2);
+		}
 
 		if (config.objective.equals("Baron")) {
 			monster = new Baron();
@@ -69,7 +75,7 @@ public class GameScreen implements Screen {
 		black.setColor(1, 1, 1, 0f);
 		uiStage.addActor(black);
 
-		smiteButtons = new SmiteButton[1];
+		smiteButtons = new SmiteButton[config.players];
 		setupUI();
 
 	}
@@ -77,31 +83,98 @@ public class GameScreen implements Screen {
 	public void setupUI() {
 		Gdx.input.setInputProcessor(uiStage);
 
-		SmiteButton button = new SmiteButton();
-		smiteButtons[0] = button;
-		uiStage.addActor(button);
-		button.setPosition(Constants.WIDTH / 2 - button.getWidth() / 2,
-				monster.getCenterY(background.getHeight()) / 3 - button.getHeight() / 2);
-		button.setDamage(monster.getSmiteDamage());
+		if (config.players == 1) {
+			final SmiteButton button = new SmiteButton(UI.smiteStyle);
+			smiteButtons[0] = button;
+			uiStage.addActor(button);
+			button.setPosition(Constants.WIDTH / 2 - button.getWidth() / 2,
+					monster.getCenterY(background.getHeight()) / 3 - button.getHeight() / 2);
+			button.setDamage(monster.getSmiteDamage());
 
-		button.addListener(new ClickListener() {
-			public void clicked(InputEvent event, float x, float y) {
+			button.addListener(new ClickListener() {
+				public void clicked(InputEvent event, float x, float y) {
 
-				if (!alreadySmited) {
-					int health = monster.getHealth();
-					boolean smiteHit = smite();
-					result.update(monster, health);
+					if (!button.alreadySmited) {
+						int health = monster.getHealth();
+						boolean smiteHit = smite();
+						result1.update(monster, health);
 
-					stats.logSmite(smiteHit, health / (float) monster.getSmiteDamage() * 100f, monster.getSmiteDamage() - health);
+						stats1.logSmite(smiteHit, health / (float) monster.getSmiteDamage() * 100f,
+								monster.getSmiteDamage() - health);
 
-					result.display();
-					result.addAction(Actions.fadeIn(0.25f));
+						result1.display();
+						result1.addAction(Actions.fadeIn(0.25f));
 
-					alreadySmited = true;
+						button.alreadySmited = true;
+					}
+
 				}
+			});
 
-			}
-		});
+			result1.setPosition(Constants.WIDTH - result1.getWidth(), Constants.HEIGHT / 2
+					- result1.getHeight() / 2);
+		} else if (config.players == 2) {
+			final SmiteButton button1 = new SmiteButton(UI.blueSmiteStyle);
+			final SmiteButton button2 = new SmiteButton(UI.redSmiteStyle);
+			smiteButtons[0] = button1;
+			smiteButtons[1] = button2;
+			button1.setRotation(90);
+			button2.setRotation(-90);
+			result1.setRotation(90);
+			result2.setRotation(-90);
+			uiStage.addActor(button1);
+			uiStage.addActor(button2);
+			button1.setPosition(Constants.WIDTH - 20 - button1.getWidth(), Constants.HEIGHT / 2
+					- button1.getHeight() / 2);
+			button2.setPosition(20, Constants.HEIGHT / 2 - button2.getHeight() / 2);
+			button1.setDamage(monster.getSmiteDamage());
+			button2.setDamage(monster.getSmiteDamage());
+
+			button1.addListener(new ClickListener() {
+				public void clicked(InputEvent event, float x, float y) {
+
+					if (!button1.alreadySmited) {
+						int health = monster.getHealth();
+						boolean smiteHit = smite();
+						result1.update(monster, health);
+
+						stats1.logSmite(smiteHit, health / (float) monster.getSmiteDamage() * 100f,
+								monster.getSmiteDamage() - health);
+
+						result1.display();
+						result1.addAction(Actions.fadeIn(0.25f));
+
+						button1.alreadySmited = true;
+					}
+
+				}
+			});
+
+			button2.addListener(new ClickListener() {
+				public void clicked(InputEvent event, float x, float y) {
+
+					if (!button2.alreadySmited) {
+						int health = monster.getHealth();
+						boolean smiteHit = smite();
+						result2.update(monster, health);
+
+						stats2.logSmite(smiteHit, health / (float) monster.getSmiteDamage() * 100f,
+								monster.getSmiteDamage() - health);
+
+						result2.display();
+						result2.addAction(Actions.fadeIn(0.25f));
+
+						button2.alreadySmited = true;
+					}
+
+				}
+			});
+
+			result1.setPosition(Constants.WIDTH / 4 * 3 - result1.getWidth() / 2,
+					result1.icon.getHeight());
+			result2.setPosition(Constants.WIDTH / 4 - result2.getWidth() / 2,
+					result1.icon.getHeight());
+		}
 
 		homeButton = new ImageButton(UI.homeStyle);
 		homeButton.addListener(new ClickListener() {
@@ -140,8 +213,10 @@ public class GameScreen implements Screen {
 				done = true;
 				currentRound++;
 				monster.reset();
-				result.hide();
-				alreadySmited = false;
+
+				for (SmiteButton button : smiteButtons) {
+					button.alreadySmited = false;
+				}
 
 				for (SmiteButton sb : smiteButtons) {
 					sb.damageText.setText(String.valueOf(monster.getDamageRate()));
@@ -150,6 +225,19 @@ public class GameScreen implements Screen {
 			return true;
 		}
 
+	}
+
+	class HideResultAction extends Action {
+		boolean done;
+
+		public boolean act(float delta) {
+			if (!done) {
+				done = true;
+				result1.hideImmediate();
+				result2.hideImmediate();
+			}
+			return true;
+		}
 	}
 
 	@Override
@@ -167,7 +255,8 @@ public class GameScreen implements Screen {
 					black.toFront();
 					black.setTouchable(Touchable.disabled);
 					black.addAction(Actions.sequence(Actions.delay(1.4f), Actions.alpha(1, 0.2f),
-							Actions.delay(0.1f), Actions.alpha(0, 0.2f), new NewRoundAction()));
+							Actions.delay(0.1f), new HideResultAction(), Actions.alpha(0, 0.2f),
+							new NewRoundAction()));
 				}
 // ai.alreadySmited = false;
 // ai.calculateSmiteHealth(monster);
@@ -175,9 +264,16 @@ public class GameScreen implements Screen {
 			} else {
 				if (!dialogShown) {
 					if (delayTimer >= 1) {
-						result.hide();
+						result1.hide();
+						result2.hide();
 
-						GameFinishedDialog dialog = new GameFinishedDialog(smiteGame, config, stats);
+						GameFinishedDialog dialog = null;
+						if (config.players == 1) {
+							dialog = new GameFinishedDialog(smiteGame, config, stats1, new Stats(0));
+						}
+						if (config.players == 2) {
+							dialog = new GameFinishedDialog(smiteGame, config, stats1, stats2);
+						}
 						dialog.show(uiStage);
 						dialogShown = true;
 					} else {

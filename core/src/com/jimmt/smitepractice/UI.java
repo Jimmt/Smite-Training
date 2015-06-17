@@ -14,7 +14,7 @@ public class UI {
 	public static TextButtonStyle startButtonStyle;
 	public static TextButtonStyle selectButtonStyle;
 	public static ImageButtonStyle smiteStyle, redSmiteStyle, blueSmiteStyle, homeStyle;
-	public static LabelStyle largeLabelStyle, smallLabelStyle, smiteLabelStyle, rankLabelStyle, rankLabelStyle_black;
+	public static LabelStyle largeLabelStyle, smallLabelStyle, smallLabelStyle_red, smallLabelStyle_blue, smiteLabelStyle, rankLabelStyle, rankLabelStyle_black, rankLabelStyle_blue, rankLabelStyle_red;
 
 	public static BitmapFont rajdhani_large, rajdhani, arial, hemihead;
 	
@@ -37,10 +37,26 @@ public class UI {
 		rankLabelStyle_black = new LabelStyle();
 		rankLabelStyle_black.font = hemihead;
 		rankLabelStyle_black.fontColor = Color.BLACK;
+		
+		rankLabelStyle_blue = new LabelStyle();
+		rankLabelStyle_blue.font = hemihead;
+		rankLabelStyle_blue.fontColor = Color.BLUE;
+		
+		rankLabelStyle_red = new LabelStyle();
+		rankLabelStyle_red.font = hemihead;
+		rankLabelStyle_red.fontColor = Color.RED;
 
 		smallLabelStyle = new LabelStyle();
 		smallLabelStyle.font = rajdhani;
 		smallLabelStyle.fontColor = Color.BLACK;
+		
+		smallLabelStyle_red = new LabelStyle();
+		smallLabelStyle_red.font = rajdhani;
+		smallLabelStyle_red.fontColor = Color.RED;
+		
+		smallLabelStyle_blue = new LabelStyle();
+		smallLabelStyle_blue.font = rajdhani;
+		smallLabelStyle_blue.fontColor = Color.BLUE;
 		
 		
 		smiteLabelStyle = new LabelStyle();
