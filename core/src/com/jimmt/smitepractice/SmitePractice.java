@@ -5,6 +5,11 @@ import com.badlogic.gdx.Gdx;
 
 public class SmitePractice extends Game {
 	public static SoundManager soundManager;
+	public static IGoogleServices services;
+	
+	public SmitePractice(IGoogleServices services){
+		this.services = services;
+	}
 
 	@Override
 	public void create() {

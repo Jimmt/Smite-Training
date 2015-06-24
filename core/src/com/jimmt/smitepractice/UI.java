@@ -13,7 +13,7 @@ public class UI {
 	public static TextButtonStyle buttonStyle;
 	public static TextButtonStyle startButtonStyle;
 	public static TextButtonStyle selectButtonStyle;
-	public static ImageButtonStyle smiteStyle, redSmiteStyle, blueSmiteStyle, homeStyle;
+	public static ImageButtonStyle smiteStyle, redSmiteStyle, blueSmiteStyle, homeStyle, gpgsStyle, highscoresStyle;
 	public static LabelStyle largeLabelStyle, smallLabelStyle, smallLabelStyle_red, smallLabelStyle_blue, smiteLabelStyle, rankLabelStyle, rankLabelStyle_black, rankLabelStyle_blue, rankLabelStyle_red;
 
 	public static BitmapFont rajdhani_large, rajdhani, arial, hemihead;
@@ -92,6 +92,12 @@ public class UI {
 		homeStyle = new ImageButtonStyle();
 		homeStyle.up = new Image(Textures.getTex("home.png")).getDrawable();
 		homeStyle.down = new Image(Textures.getTex("home.png")).getDrawable();
+		gpgsStyle = new ImageButtonStyle();
+		gpgsStyle.up = new Image(Textures.getTex("gpgs.png")).getDrawable();
+		gpgsStyle.down = new Image(Textures.getTex("gpgs.png")).getDrawable();
+		highscoresStyle = new ImageButtonStyle();
+		highscoresStyle.up = new Image(Textures.getTex("leaderboards.png")).getDrawable();
+		highscoresStyle.down = new Image(Textures.getTex("leaderboards.png")).getDrawable();
 		
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 

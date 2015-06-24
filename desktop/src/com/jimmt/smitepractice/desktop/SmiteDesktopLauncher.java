@@ -2,6 +2,7 @@ package com.jimmt.smitepractice.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.jimmt.smitepractice.DesktopGoogleServices;
 import com.jimmt.smitepractice.SmitePractice;
 
 public class SmiteDesktopLauncher {
@@ -9,6 +10,6 @@ public class SmiteDesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1024;
 		config.height = 768;
-		new LwjglApplication(new SmitePractice(), config);
+		new LwjglApplication(new SmitePractice(new DesktopGoogleServices()), config);
 	}
 }

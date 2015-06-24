@@ -69,8 +69,10 @@ public class GameFinishedDialog extends Dialog {
 			}
 		});
 		Label smitesHitLabel = new Label("Smites hit: ", UI.smallLabelStyle);
-		Label hit1Label = new Label(stats1.smitesHit + " / " + stats1.totalSmites, UI.smallLabelStyle_blue);
-		Label hit2Label = new Label(stats2.smitesHit + " / " + stats2.totalSmites, UI.smallLabelStyle_red);
+		Label hit1Label = new Label(stats1.smitesHit + " / " + stats1.totalSmites,
+				UI.smallLabelStyle_blue);
+		Label hit2Label = new Label(stats2.smitesHit + " / " + stats2.totalSmites,
+				UI.smallLabelStyle_red);
 
 		if (config.players == 1) {
 			table.add(smitesHit).colspan(2).padBottom(20f);
@@ -105,6 +107,12 @@ public class GameFinishedDialog extends Dialog {
 		table.add(retryButton).width(retryButton.getWidth() / 2)
 				.height(retryButton.getHeight() / 2);
 		table.add(backButton).width(retryButton.getWidth() / 2).height(retryButton.getHeight() / 2);
+
+		if (config.rounds >= 5) {
+			SmitePractice.services.submitScore5((long) Math.abs(stats1.getAverageDiff()));
+		} else {
+			SmitePractice.services.submitScore1((long) Math.abs(stats1.getAverageDiff()));
+		}
 	}
 
 	@Override
