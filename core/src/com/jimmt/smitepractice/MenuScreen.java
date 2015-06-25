@@ -3,6 +3,7 @@ package com.jimmt.smitepractice;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -11,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 
 public class MenuScreen implements Screen {
 	Stage uiStage;
@@ -19,12 +20,10 @@ public class MenuScreen implements Screen {
 	TextButton play1Button, play2Button, optionsButton;
 	ImageButton highscoresButton;
 	ImageButton gpgsButton;
-	StretchViewport viewport;
 	Image background;
 
 	public MenuScreen(final SmitePractice smiteGame) {
-		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
-		uiStage = new Stage(viewport);
+		uiStage = new Stage(new FillViewport(Constants.WIDTH, Constants.HEIGHT));
 
 		background = new Image(Textures.getTex("background/dragon.png"));
 		uiStage.addActor(background);
@@ -63,9 +62,13 @@ public class MenuScreen implements Screen {
 		uiStage.addActor(table);
 		table.setFillParent(true);
 
+		float aspectRatio = Gdx.graphics.getWidth() / Constants.WIDTH;
+		
 		gpgsButton = new ImageButton(UI.gpgsStyle);
 		uiStage.addActor(gpgsButton);
-		gpgsButton.setPosition(margin, Constants.HEIGHT - margin - gpgsButton.getHeight());
+		Vector2 temp = new Vector2(margin, margin + gpgsButton.getHeight() * aspectRatio);
+		uiStage.getViewport().unproject(temp);
+		gpgsButton.setPosition(temp.x, temp.y);
 		gpgsButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				SmitePractice.services.signIn();
@@ -79,8 +82,10 @@ public class MenuScreen implements Screen {
 			}
 		});
 		uiStage.addActor(highscoresButton);
-		highscoresButton.setPosition(Constants.WIDTH - highscoresButton.getWidth() - margin,
-				Constants.HEIGHT - highscoresButton.getHeight() - margin);
+		Vector2 temp1 = new Vector2(Gdx.graphics.getWidth() - highscoresButton.getWidth() * aspectRatio - margin,
+				highscoresButton.getHeight() * aspectRatio + margin);
+		uiStage.getViewport().unproject(temp1);
+		highscoresButton.setPosition(temp1.x, temp1.y);
 
 		Gdx.input.setInputProcessor(uiStage);
 
@@ -93,20 +98,21 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		Gdx.gl.glClearColor(1, 1, 1, 1.0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		uiStage.act(delta);
 		uiStage.draw();
 
-		viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+// uiStage.getViewport().update(Gdx.graphics.getWidth(),
+// Gdx.graphics.getHeight());
 
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		viewport.update(width, height);
+		uiStage.getViewport().update(width, height);
+		uiStage.getViewport().apply();
 	}
 
 	@Override

@@ -1,12 +1,20 @@
 package com.jimmt.smitepractice.android;
 
+import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
@@ -16,6 +24,10 @@ import com.jimmt.smitepractice.SmitePractice;
 public class AndroidLauncher extends AndroidApplication implements IGoogleServices {
 	private GameHelper gameHelper;
 	private int REQUEST_CODE_UNUSED = 1001;
+	private String BANNER_ID = "ca-app-pub-1538406962874141/8408589714";
+	protected AdView adView, admobView;
+	protected View gameView;
+	private RelativeLayout layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +47,58 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 		};
 		gameHelper.setup(gameHelperListener);
 
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
+		layout = new RelativeLayout(this);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+		layout.setLayoutParams(params);
+
+		admobView = createAdView();
+		layout.addView(admobView);
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new SmitePractice(this), config);
+
+		View gameView = createGameView(config);
+		layout.addView(gameView);
+
+		setContentView(layout);
+		startAdvertising(admobView);
+
+// initialize(new SmitePractice(this), config);
+	}
+
+	private void startAdvertising(AdView adView) {
+		AdRequest adRequest = new AdRequest.Builder().build();
+		adView.loadAd(adRequest);
+	}
+
+	private AdView createAdView() {
+		adView = new AdView(this);
+		adView.setAdSize(AdSize.SMART_BANNER);
+		adView.setAdUnitId(BANNER_ID);
+		adView.setId(12345); // this is an arbitrary id, allows for relative
+// positioning in createGameView()
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+		adView.setLayoutParams(params);
+		adView.setBackgroundColor(Color.BLACK);
+		return adView;
+	}
+
+	private View createGameView(AndroidApplicationConfiguration cfg) {
+		gameView = initializeForView(new SmitePractice(this), cfg);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+		params.addRule(RelativeLayout.BELOW, adView.getId());
+		gameView.setLayoutParams(params);
+		return gameView;
 	}
 
 	@Override
@@ -117,7 +179,6 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 		}
 	}
 
-
 	@Override
 	public boolean isSignedIn() {
 		return gameHelper.isSignedIn();
@@ -131,7 +192,7 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 					REQUEST_CODE_UNUSED);
 		else {
 			signIn();
-		}		
+		}
 	}
 
 	@Override

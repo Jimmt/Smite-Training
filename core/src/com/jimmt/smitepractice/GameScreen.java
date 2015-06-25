@@ -3,6 +3,7 @@ package com.jimmt.smitepractice;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,12 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 
 public class GameScreen implements Screen {
 	SmitePractice smiteGame;
 	Stage uiStage;
-	StretchViewport viewport;
+	FillViewport viewport;
 	Stats stats1;
 	Stats stats2;
 	Monster monster;
@@ -41,7 +42,7 @@ public class GameScreen implements Screen {
 		stats1 = new Stats(config.rounds);
 		stats2 = new Stats(config.rounds);
 
-		viewport = new StretchViewport(Constants.WIDTH, Constants.HEIGHT);
+		viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT);
 		uiStage = new Stage(viewport);
 
 		background = new Image(Textures.getTex("background/"
@@ -176,6 +177,8 @@ public class GameScreen implements Screen {
 					result1.icon.getHeight());
 		}
 
+		float aspectRatio = Gdx.graphics.getWidth() / Constants.WIDTH;
+		
 		homeButton = new ImageButton(UI.homeStyle);
 		homeButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
@@ -184,6 +187,9 @@ public class GameScreen implements Screen {
 		});
 		uiStage.addActor(homeButton);
 		homeButton.setPosition(20, Constants.HEIGHT - homeButton.getHeight() - 20);
+		Vector2 temp = new Vector2(20,  homeButton.getHeight() * aspectRatio + 20);
+		uiStage.getViewport().unproject(temp);
+		homeButton.setPosition(temp.x, temp.y);
 
 	}
 
@@ -242,9 +248,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		Gdx.gl.glClearColor(1, 1, 1, 1.0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		monster.update(delta);
 // ai.update(delta);
@@ -288,7 +293,7 @@ public class GameScreen implements Screen {
 		uiStage.act(delta);
 		uiStage.draw();
 
-		viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
 
 	}
 
