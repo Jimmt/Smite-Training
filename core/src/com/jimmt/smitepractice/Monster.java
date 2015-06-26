@@ -22,6 +22,7 @@ public abstract class Monster {
 		calculateObjectiveHealth();
 		calculateSmiteDamage();
 		health = maxHealth / 3;
+
 	}
 
 	public void reset() {
@@ -61,11 +62,6 @@ public abstract class Monster {
 		damageRate = (int) (300 + 600 * ((float) (time - startTime)) / (endTime - startTime));
 	}
 
-	public void calculateSmiteDamage() {
-		float ratio = ((float) (time - startTime)) / (endTime - startTime);
-		smiteDamage = damages[(int) (ratio * (damages.length - 1))];
-	}
-
 	public int getSmiteDamage() {
 		return smiteDamage;
 	}
@@ -73,6 +69,8 @@ public abstract class Monster {
 	public int getDamageRate() {
 		return damageRate;
 	}
+
+	public abstract void calculateSmiteDamage();
 
 	public abstract void calculateObjectiveHealth();
 

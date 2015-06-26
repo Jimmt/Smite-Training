@@ -1,6 +1,12 @@
 package com.jimmt.smitepractice;
 
 public class Dragon extends Monster {
+	
+	@Override
+	public void calculateSmiteDamage() {
+		float ratio = ((float) (time - startTime)) / (endTime - startTime);
+		smiteDamage = damages[4 + (int) (ratio * (damages.length - 5))];
+	}
 
 	@Override
 	public void calculateObjectiveHealth() {

@@ -1,10 +1,12 @@
 package com.jimmt.smitepractice;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -178,7 +180,7 @@ public class GameScreen implements Screen {
 		}
 
 		float aspectRatio = Gdx.graphics.getWidth() / Constants.WIDTH;
-		
+
 		homeButton = new ImageButton(UI.homeStyle);
 		homeButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
@@ -187,7 +189,7 @@ public class GameScreen implements Screen {
 		});
 		uiStage.addActor(homeButton);
 		homeButton.setPosition(20, Constants.HEIGHT - homeButton.getHeight() - 20);
-		Vector2 temp = new Vector2(20,  homeButton.getHeight() * aspectRatio + 20);
+		Vector2 temp = new Vector2(20, homeButton.getHeight() * aspectRatio + 20);
 		uiStage.getViewport().unproject(temp);
 		homeButton.setPosition(temp.x, temp.y);
 
@@ -251,6 +253,22 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClearColor(1, 1, 1, 1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.F)) {
+			if (!smiteButtons[0].alreadySmited) {
+				int health = monster.getHealth();
+				boolean smiteHit = smite();
+				result1.update(monster, health);
+
+				stats1.logSmite(smiteHit, health / (float) monster.getSmiteDamage() * 100f,
+						monster.getSmiteDamage() - health);
+
+				result1.display();
+				result1.addAction(Actions.fadeIn(0.25f));
+
+				smiteButtons[0].alreadySmited = true;
+			}
+		}
+
 		monster.update(delta);
 // ai.update(delta);
 		if (monster.getHealth() <= 0) {
@@ -292,8 +310,6 @@ public class GameScreen implements Screen {
 
 		uiStage.act(delta);
 		uiStage.draw();
-
-		
 
 	}
 
