@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
@@ -28,6 +29,7 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 	protected AdView adView, admobView;
 	protected View gameView;
 	private RelativeLayout layout;
+	private int adHeight;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,13 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 
 		setContentView(layout);
 		startAdvertising(admobView);
+		
+		adView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+		    @Override
+		    public void onGlobalLayout() {
+		        adHeight = adView.getHeight();
+		    }
+		});
 
 // initialize(new SmitePractice(this), config);
 	}
@@ -91,7 +100,7 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 	}
 
 	private View createGameView(AndroidApplicationConfiguration cfg) {
-		gameView = initializeForView(new SmitePractice(this), cfg);
+		gameView = initializeForView(new SmitePractice(this, adHeight), cfg);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);

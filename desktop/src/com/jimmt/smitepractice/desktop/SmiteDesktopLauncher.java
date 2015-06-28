@@ -8,8 +8,8 @@ import com.jimmt.smitepractice.SmitePractice;
 public class SmiteDesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1024;
-		config.height = 768;
-		new LwjglApplication(new SmitePractice(new DesktopGoogleServices()), config);
+		config.width = 1200;
+		config.height = 720;
+		new LwjglApplication(new SmitePractice(new DesktopGoogleServices(), 0), config);
 	}
 }

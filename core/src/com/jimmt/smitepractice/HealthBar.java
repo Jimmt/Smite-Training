@@ -1,6 +1,8 @@
 package com.jimmt.smitepractice;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -57,6 +59,8 @@ public class HealthBar extends Actor {
 		for (int i = 0; i < dividers.size; i++) {
 			dividers.get(i).setPosition(bar.getX() + i * divWidth, bar.getY());
 		}
+		
+		
 
 	}
 

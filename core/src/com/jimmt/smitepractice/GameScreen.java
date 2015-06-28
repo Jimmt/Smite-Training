@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -15,11 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class GameScreen implements Screen {
 	SmitePractice smiteGame;
 	Stage uiStage;
-	FillViewport viewport;
+	Stage healthBarStage;
 	Stats stats1;
 	Stats stats2;
 	Monster monster;
@@ -33,6 +35,7 @@ public class GameScreen implements Screen {
 	ImageButton homeButton;
 	SmiteResult result1;
 	SmiteResult result2;
+	SpriteBatch spriteBatch;
 
 	int currentRound = 1;
 	boolean infinite, dialogShown;
@@ -44,8 +47,9 @@ public class GameScreen implements Screen {
 		stats1 = new Stats(config.rounds);
 		stats2 = new Stats(config.rounds);
 
-		viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT);
-		uiStage = new Stage(viewport);
+		healthBarStage = new Stage(new ScreenViewport());
+
+		uiStage = new Stage(new StretchViewport(Constants.WIDTH, Constants.HEIGHT));
 
 		background = new Image(Textures.getTex("background/"
 				+ config.objective.toString().toLowerCase() + ".png"));
@@ -65,11 +69,14 @@ public class GameScreen implements Screen {
 		}
 
 		healthBar = new HealthBar(monster.getMaxHealth() / 3, monster.getMaxHealth());
-		healthBar.centerPosition(monster.getCenterX(background.getWidth()),
-				monster.getCenterY(background.getHeight()));
+		Vector2 temp;
+		uiStage.stageToScreenCoordinates(temp = new Vector2(monster.getCenterX(background
+				.getWidth()), Constants.HEIGHT - monster.getCenterY(background.getHeight())));
+		healthBar.centerPosition(temp.x, temp.y);
+		healthBarStage.addActor(healthBar);
 
 		background.addAction(Actions.sizeTo(Constants.WIDTH, Constants.HEIGHT));
-		uiStage.addActor(healthBar);
+// uiStage.addActor(healthBar);
 		uiStage.addActor(beam);
 		beam.setPosition(monster.getSmiteX(background.getWidth()) - beam.getWidth() / 2,
 				monster.getSmiteY(background.getHeight()));
@@ -80,6 +87,8 @@ public class GameScreen implements Screen {
 
 		smiteButtons = new SmiteButton[config.players];
 		setupUI();
+
+		spriteBatch = new SpriteBatch();
 
 	}
 
@@ -227,7 +236,7 @@ public class GameScreen implements Screen {
 				}
 
 				for (SmiteButton sb : smiteButtons) {
-					sb.damageText.setText(String.valueOf(monster.getDamageRate()));
+					sb.damageText.setText(String.valueOf(monster.getSmiteDamage()));
 				}
 			}
 			return true;
@@ -299,6 +308,7 @@ public class GameScreen implements Screen {
 						}
 						dialog.show(uiStage);
 						dialogShown = true;
+						healthBar.setVisible(false);
 					} else {
 						delayTimer += delta;
 					}
@@ -310,12 +320,14 @@ public class GameScreen implements Screen {
 
 		uiStage.act(delta);
 		uiStage.draw();
+		healthBarStage.act(delta);
+		healthBarStage.draw();
 
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		viewport.update(width, height);
+		uiStage.getViewport().update(width, height);
 	}
 
 	@Override

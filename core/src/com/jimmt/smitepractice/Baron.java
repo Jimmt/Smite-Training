@@ -11,7 +11,6 @@ public class Baron extends Monster {
 	@Override
 	public void calculateObjectiveHealth() {
 		maxHealth = (int) (6400 + 180 * time / 2);
-
 	}
 
 	@Override
