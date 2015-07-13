@@ -108,10 +108,10 @@ public class GameFinishedDialog extends Dialog {
 				.height(retryButton.getHeight() / 2);
 		table.add(backButton).width(retryButton.getWidth() / 2).height(retryButton.getHeight() / 2);
 
-		if (config.rounds >= 5) {
-			SmitePractice.services.submitScore5((long) Math.abs(stats1.getAverageDiff()));
+		if (config.rounds >= 5 && stats1.getAveragePercent() <= 100) {
+			SmitePractice.services.submitScore5((long) stats1.getAveragePercent());
 		} else {
-			SmitePractice.services.submitScore1((long) Math.abs(stats1.getAverageDiff()));
+			SmitePractice.services.submitScore1((long) stats1.getAveragePercent());
 		}
 	}
 

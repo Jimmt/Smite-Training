@@ -68,13 +68,14 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 
 		setContentView(layout);
 		startAdvertising(admobView);
-		
-		adView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-		    @Override
-		    public void onGlobalLayout() {
-		        adHeight = adView.getHeight();
-		    }
-		});
+
+		adView.getViewTreeObserver().addOnGlobalLayoutListener(
+				new ViewTreeObserver.OnGlobalLayoutListener() {
+					@Override
+					public void onGlobalLayout() {
+						adHeight = adView.getHeight();
+					}
+				});
 
 // initialize(new SmitePractice(this), config);
 	}
@@ -164,12 +165,9 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 
 	@Override
 	public void submitScore5(long score) {
-		if (isSignedIn() == true) {
+		if (isSignedIn()) {
 			Games.Leaderboards.submitScore(gameHelper.getApiClient(),
 					getString(R.string.leaderboard_id_5), score);
-			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
-					gameHelper.getApiClient(), getString(R.string.leaderboard_id_5)),
-					REQUEST_CODE_UNUSED);
 		} else {
 			signIn();
 		}
@@ -177,12 +175,9 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 
 	@Override
 	public void submitScore1(long score) {
-		if (isSignedIn() == true) {
+		if (isSignedIn()) {
 			Games.Leaderboards.submitScore(gameHelper.getApiClient(),
 					getString(R.string.leaderboard_id_1), score);
-			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
-					gameHelper.getApiClient(), getString(R.string.leaderboard_id_1)),
-					REQUEST_CODE_UNUSED);
 		} else {
 			signIn();
 		}
@@ -194,23 +189,11 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 	}
 
 	@Override
-	public void showScores5() {
-		if (isSignedIn() == true)
-			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
-					gameHelper.getApiClient(), getString(R.string.leaderboard_id_5)),
-					REQUEST_CODE_UNUSED);
-		else {
-			signIn();
-		}
-	}
-
-	@Override
-	public void showScores1() {
-		if (isSignedIn() == true)
-			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
-					gameHelper.getApiClient(), getString(R.string.leaderboard_id_1)),
-					REQUEST_CODE_UNUSED);
-		else {
+	public void showScores() {
+		
+		if (isSignedIn()) {
+			startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(gameHelper.getApiClient()), REQUEST_CODE_UNUSED);
+		} else {
 			signIn();
 		}
 	}

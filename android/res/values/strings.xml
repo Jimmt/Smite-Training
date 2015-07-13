@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SmitePractice</string>
+    <string name="app_name">Smite Training</string>
     <integer name="google_play_services_version">7095000</integer>
 
 </resources>

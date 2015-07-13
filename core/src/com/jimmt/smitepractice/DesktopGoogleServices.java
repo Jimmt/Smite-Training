@@ -27,12 +27,7 @@ public class DesktopGoogleServices implements IGoogleServices {
 	}
 
 	@Override
-	public void showScores5() {
-		System.out.println("DesktopGoogleServies: showScores()");
-	}
-	
-	@Override
-	public void showScores1() {
+	public void showScores() {
 		System.out.println("DesktopGoogleServies: showScores()");
 	}
 

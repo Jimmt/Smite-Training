@@ -77,8 +77,7 @@ public class MenuScreen implements Screen {
 		highscoresButton = new ImageButton(UI.highscoresStyle);
 		highscoresButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				HighscoresDialog dialog = new HighscoresDialog();
-				dialog.show(uiStage);
+				SmitePractice.services.showScores();
 			}
 		});
 		uiStage.addActor(highscoresButton);
