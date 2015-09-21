@@ -36,4 +36,10 @@ public class DesktopGoogleServices implements IGoogleServices {
 		System.out.println("DesktopGoogleServies: isSignedIn()");
 		return false;
 	}
+
+	@Override
+	public void showAd() {
+		System.out.println("DesktopGoogleServices: showAd()");
+		
+	}
 }

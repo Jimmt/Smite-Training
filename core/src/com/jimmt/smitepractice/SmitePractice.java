@@ -6,11 +6,10 @@ import com.badlogic.gdx.Gdx;
 public class SmitePractice extends Game {
 	public static SoundManager soundManager;
 	public static IGoogleServices services;
-	public static int adHeight;
+	public static int count = 0;
 	
-	public SmitePractice(IGoogleServices services, int adHeight){
+	public SmitePractice(IGoogleServices services){
 		this.services = services;
-		this.adHeight = adHeight;
 	}
 
 	@Override

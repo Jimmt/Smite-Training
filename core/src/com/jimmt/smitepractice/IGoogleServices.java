@@ -12,6 +12,8 @@ public interface IGoogleServices {
 	public void submitScore1(long score);
 
 	public void showScores();
+	
+	public void showAd();
 
 	public boolean isSignedIn();
 }

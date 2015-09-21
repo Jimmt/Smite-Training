@@ -136,9 +136,10 @@ public class GameScreen implements Screen {
 			result2.setRotation(-90);
 			uiStage.addActor(button1);
 			uiStage.addActor(button2);
-			button1.setPosition(Constants.WIDTH - 20 - button1.getWidth(), Constants.HEIGHT / 2
-					- button1.getHeight() / 2);
-			button2.setPosition(20, Constants.HEIGHT / 2 - button2.getHeight() / 2);
+			button1.setPosition(Constants.WIDTH - 20 - button1.button.getWidth() * 2f / 2f,
+					Constants.HEIGHT / 2 - button1.button.getHeight() / 2);
+			button2.setPosition(20 + button2.button.getWidth() * 2f / 2f, Constants.HEIGHT / 2
+					- button2.button.getHeight() / 2);
 			button1.setDamage(monster.getSmiteDamage());
 			button2.setDamage(monster.getSmiteDamage());
 

@@ -10,6 +10,6 @@ public class SmiteDesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1200;
 		config.height = 720;
-		new LwjglApplication(new SmitePractice(new DesktopGoogleServices(), 0), config);
+		new LwjglApplication(new SmitePractice(new DesktopGoogleServices()), config);
 	}
 }

@@ -113,6 +113,17 @@ public class GameFinishedDialog extends Dialog {
 		} else {
 			SmitePractice.services.submitScore1((long) stats1.getAveragePercent());
 		}
+
+		SmitePractice.count++;
+
+		if (config.rounds == 1) {
+			if (SmitePractice.count % 3 == 0) {
+				SmitePractice.services.showAd();
+			}
+		} else {
+			SmitePractice.services.showAd();
+		}
+
 	}
 
 	@Override
