@@ -9,11 +9,11 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public GwtApplicationConfiguration getConfig () {
-                return new GwtApplicationConfiguration(480, 320);
+                return new GwtApplicationConfiguration(1200, 720);
         }
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new SmitePractice(null, null);
+                return new SmitePractice(new HtmlServices(), new HtmlFloatFormatter());
         }
 }

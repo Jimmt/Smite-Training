@@ -1,14 +1,22 @@
 package com.jimmt.smitepractice.android;
 
+import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.chartboost.sdk.CBLocation;
-import com.chartboost.sdk.Chartboost;
+//import com.chartboost.sdk.CBLocation;
+//import com.chartboost.sdk.Chartboost;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
@@ -18,6 +26,12 @@ import com.jimmt.smitepractice.SmitePractice;
 public class AndroidLauncher extends AndroidApplication implements IGoogleServices {
 	private GameHelper gameHelper;
 	private final int REQUEST_CODE_UNUSED = 1001;
+
+	private static final String AD_UNIT_ID_INTERSTITIAL = "ca-app-pub-1538406962874141/4749295311";
+	public InterstitialAd interstitialAd;
+	protected AdView admobView;
+	protected View gameView;
+	protected RelativeLayout layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,52 +51,89 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 		};
 		gameHelper.setup(gameHelperListener);
 
-		Chartboost.startWithAppId(this, "55a7f56204b0162f38a2fa4a",
-				"1b5177b465f66376edd140ddd31a0dde810ccb10");
-		Chartboost.onCreate(this);
+// Chartboost.startWithAppId(this, "55a7f56204b0162f38a2fa4a",
+// "1b5177b465f66376edd140ddd31a0dde810ccb10");
+// Chartboost.onCreate(this);
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new SmitePractice(this), config);
+// initialize(new SmitePractice(this, new AndroidFloatFormatter()), config);
+
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
+		layout = new RelativeLayout(this);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+		layout.setLayoutParams(params);
+
+		View gameView = createGameView(config);
+		layout.addView(gameView);
+
+		setContentView(layout);
+
+		interstitialAd = new InterstitialAd(this);
+		interstitialAd.setAdUnitId(AD_UNIT_ID_INTERSTITIAL);
+		interstitialAd.setAdListener(new AdListener() {
+			@Override
+			public void onAdLoaded() {
+			}
+
+			@Override
+			public void onAdClosed() {
+			}
+		});
+	}
+
+
+	private View createGameView(AndroidApplicationConfiguration cfg) {
+		gameView = initializeForView(new SmitePractice(this, new AndroidFloatFormatter()), cfg);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+		gameView.setLayoutParams(params);
+		return gameView;
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		gameHelper.onStart(this);
-		Chartboost.onStart(this);
+//		Chartboost.onStart(this);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
 		gameHelper.onStop();
-		Chartboost.onStop(this);
+//		Chartboost.onStop(this);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		Chartboost.onResume(this);
+//		Chartboost.onResume(this);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		Chartboost.onPause(this);
+//		Chartboost.onPause(this);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Chartboost.onDestroy(this);
+//		Chartboost.onDestroy(this);
 	}
 
 	@Override
 	public void onBackPressed() {
 		// If an interstitial is on screen, close it.
-		if (Chartboost.onBackPressed())
-			return;
-		else
+//		if (Chartboost.onBackPressed())
+//			return;
+//		else
 			super.onBackPressed();
 	}
 
@@ -165,7 +216,22 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 
 	@Override
 	public void showAd() {
-		Chartboost.cacheInterstitial(CBLocation.LOCATION_DEFAULT);
-		Chartboost.showInterstitial(CBLocation.LOCATION_DEFAULT);
+		try {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					if (interstitialAd.isLoaded()) {
+						interstitialAd.show();
+// Toast.makeText(launcher.getApplicationContext(), "Showing Interstitial",
+// Toast.LENGTH_SHORT).show();
+					} else {
+						AdRequest interstitialRequest = new AdRequest.Builder().build();
+						interstitialAd.loadAd(interstitialRequest);
+// Toast.makeText(launcher.getApplicationContext(), "Loading Interstitial",
+// Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+		} catch (Exception e) {
+		}
 	}
 }

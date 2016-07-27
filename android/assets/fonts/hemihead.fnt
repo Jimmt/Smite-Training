@@ -1,8 +1,8 @@
 info face="Hemi Head Rg" size=48 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
 common lineHeight=48 base=38 scaleW=256 scaleH=256 pages=3 packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4
-page id=0 file="hemihead_0.tga"
-page id=1 file="hemihead_1.tga"
-page id=2 file="hemihead_2.tga"
+page id=0 file="hemihead_0.png"
+page id=1 file="hemihead_1.png"
+page id=2 file="hemihead_2.png"
 chars count=191
 char id=23   x=246   y=70    width=1     height=1     xoffset=0     yoffset=0     xadvance=11    page=0  chnl=15
 char id=32   x=252   y=70    width=1     height=1     xoffset=0     yoffset=0     xadvance=11    page=0  chnl=15

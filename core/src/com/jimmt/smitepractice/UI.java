@@ -21,6 +21,7 @@ public class UI {
 	public static Skin skin;
 
 	public static void initialize() {
+		System.out.println(Gdx.files.internal("").list().length);
 		rajdhani_large = new BitmapFont(Gdx.files.internal("fonts/rajdhani_large.fnt"));
 		rajdhani = new BitmapFont(Gdx.files.internal("fonts/rajdhani.fnt"));
 		arial = new BitmapFont(Gdx.files.internal("fonts/arial.fnt"));

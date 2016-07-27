@@ -1,13 +1,12 @@
 package com.jimmt.smitepractice;
 
-import com.badlogic.gdx.graphics.Color;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
 public class SmiteResult extends Image {
@@ -82,7 +81,8 @@ public class SmiteResult extends Image {
 		int maxDifference = monster.getSmiteDamage();
 
 		float ratio = smiteHealth / (float) maxDifference * 100f;
-		String formatted = String.format("%.3g", ratio) + "%";
+		
+		String formatted = SmitePractice.formatter.getFormattedString(ratio) + "%";
 		text.setText(formatted);
 
 		setColors(ratio);

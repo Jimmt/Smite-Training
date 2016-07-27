@@ -22,12 +22,12 @@ public class GameFinishedDialog extends Dialog {
 
 		Label averageLabel = new Label("Average Percent:", UI.smallLabelStyle);
 		Label percentLabel = new Label("", UI.rankLabelStyle_black);
-		Label redPercentLabel = new Label(String.format("%.3g", stats1.getAveragePercent()) + "%",
+		Label redPercentLabel = new Label(SmitePractice.formatter.getFormattedString(stats1.getAveragePercent()) + "%",
 				UI.rankLabelStyle_blue);
-		Label bluePercentLabel = new Label(String.format("%.3g", stats2.getAveragePercent()) + "%",
+		Label bluePercentLabel = new Label(SmitePractice.formatter.getFormattedString(stats2.getAveragePercent()) + "%",
 				UI.rankLabelStyle_red);
 		String formatted = "";
-		formatted = String.format("%.3g", stats1.getAveragePercent()) + "%";
+		formatted = SmitePractice.formatter.getFormattedString(stats1.getAveragePercent()) + "%";
 
 		percentLabel.setText(formatted.trim());
 		Label averageDiffLabel = new Label("", UI.smallLabelStyle);
@@ -117,9 +117,9 @@ public class GameFinishedDialog extends Dialog {
 		SmitePractice.count++;
 
 		if (config.rounds == 1) {
-			if (SmitePractice.count % 3 == 0) {
+//			if (SmitePractice.count % 3 == 0) {
 				SmitePractice.services.showAd();
-			}
+//			}
 		} else {
 			SmitePractice.services.showAd();
 		}
