@@ -83,6 +83,8 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 			public void onAdClosed() {
 			}
 		});
+		
+		 
 	}
 
 
@@ -224,6 +226,7 @@ public class AndroidLauncher extends AndroidApplication implements IGoogleServic
 // Toast.makeText(launcher.getApplicationContext(), "Showing Interstitial",
 // Toast.LENGTH_SHORT).show();
 					} else {
+						//new AdRequest.Builder().addTestDevice("473C39947446CF314412681C567E98A7").build()
 						AdRequest interstitialRequest = new AdRequest.Builder().build();
 						interstitialAd.loadAd(interstitialRequest);
 // Toast.makeText(launcher.getApplicationContext(), "Loading Interstitial",
