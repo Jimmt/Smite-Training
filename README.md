@@ -1,0 +1,1 @@
+Smite training game featuring randomized smite damage with both baron and dragon. One or two players can play on the same phone. Available on Google Play: https://play.google.com/store/apps/details?id=com.jimmt.smitepractice.android&hl=en
